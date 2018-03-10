@@ -46,6 +46,16 @@ namespace MDLinkShortener.Repository
 
         public void AddLink(Link link)
         {
+            if (_links.Count > 0)
+            {
+                link.Id = _links[_links.Count - 1].Id + 1;
+            }
+            else
+            {
+                link.Id = 0;
+            }
+            
+
             link.ShortLink = hashids.Encode(timeSinceMidnight());
             _links.Add(link);
         }
