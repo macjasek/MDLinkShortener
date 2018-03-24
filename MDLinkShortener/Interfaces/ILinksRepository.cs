@@ -5,7 +5,7 @@ namespace MDLinkShortener.Interfaces
 {
     public interface ILinksRepository
     {
-        List<Link> GetLinks();
+        (IEnumerable<Link>, int) Get(int skip);
         void AddLink(Link link);
         void Delete(int linkId);
         void Update(Link link);

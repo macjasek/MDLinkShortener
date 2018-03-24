@@ -12,6 +12,7 @@ namespace MDLinkShortener.Repository
         private List<Link> _links;
         private Hashids hashids = new Hashids("Akademia WebDev",4);
         private readonly LinkDbContext _context;
+        private readonly int linksPerPage = 20;
 
 
         public LinksRepository(LinkDbContext context)
@@ -42,61 +43,61 @@ namespace MDLinkShortener.Repository
             return timeMsSinceMidnight;
         }
 
-        public List<Link> GetLinks()
+        public (IEnumerable<Link>, int) Get(int skip)
         {
-            return _links;
+            var links = _context.Links;
+            var linksCount = links.Count();
+
+            var paginatedLinks = links
+                .OrderBy(x => x.Id)
+                .Skip(skip)
+                .Take(linksPerPage);
+
+            return (paginatedLinks, linksCount);
         }
 
         public void AddLink(Link link)
         {
-            if (_links.Count > 0)
-            {
-                link.Id = _links[_links.Count - 1].Id + 1;
-            }
-            else
-            {
-                link.Id = 0;
-            }
-            
-
             link.ShortLink = hashids.Encode(TimeSinceMidnight());
-            _links.Add(link);
+            _context.Links.Add(link);
+            _context.SaveChanges();
         }
 
         public void Delete(int linkId)
         {
-            var linkToDelete = _links.SingleOrDefault(element => element.Id == linkId);
-            if (linkToDelete !=null)
-            {
-                _links.Remove(linkToDelete);
-            }
+            Link linkEntity = _context.Links.Find(linkId);
+            _context.Links.Remove(linkEntity);
+            _context.SaveChanges();
             
         }
 
         public void Update(Link link)
         {
-            var linkToUpdateIndex = _links.FindIndex(element => element.Id == link.Id);
-            if(linkToUpdateIndex != -1)
-            {
-                _links[linkToUpdateIndex] = link;
-            }
+            _context.Links.Attach(link);
+            _context.SaveChanges();
         }
 
         public string RedirectLink(string id)
         {
-            var linkToRedirectIndex = _links.FindIndex(element => element.ShortLink == id);
-            if (linkToRedirectIndex != -1)
+            var linkToRedirect = _context.Links
+                .Where(x => x.ShortLink == id)
+                .FirstOrDefault();
+
+            if (linkToRedirect != null)
             {
-                return _links[linkToRedirectIndex].FullLink;
+                return linkToRedirect.FullLink;
             }
 
-            return "Index";
+            return "index";
+
                 
         }
 
         public void Clear()
         {
-            _links.Clear();
+            _context.RemoveRange(_context.Links);
         }
+
+
     }
 }

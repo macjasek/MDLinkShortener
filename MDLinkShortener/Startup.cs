@@ -22,7 +22,7 @@ namespace MDLinkShortener
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<ILinksRepository, LinksRepository>();
+            services.AddTransient<ILinksRepository, LinksRepository>();
             services.AddDbContext<LinkDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("LinkDbConnection")));
         }
 

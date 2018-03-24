@@ -1,6 +1,7 @@
 ﻿using MDLinkShortener.Interfaces;
 using MDLinkShortener.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace MDLinkShortener.Controllers
 {
@@ -16,8 +17,8 @@ namespace MDLinkShortener.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var links = _repository.GetLinks();
-            return View(links);
+            var (links, count) = _repository.Get(0);
+            return View(links.Select(x => x).ToList());
         }
 
         [HttpPost]
