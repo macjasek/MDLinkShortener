@@ -4,6 +4,7 @@ namespace MDLinkShortener.Models
 {
     public class Link
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [Url]

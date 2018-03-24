@@ -11,28 +11,31 @@ namespace MDLinkShortener.Repository
     {
         private List<Link> _links;
         private Hashids hashids = new Hashids("Akademia WebDev",4);
+        private readonly LinkDbContext _context;
 
-        public LinksRepository()
+
+        public LinksRepository(LinkDbContext context)
         {
+            _context = context;
             _links = new List<Link>
             {
                 new Link
                 {
                     Id = 0,
                     FullLink = "https://ilovebluesguitar.com/",
-                    ShortLink = hashids.Encode(timeSinceMidnight())
+                    ShortLink = hashids.Encode(TimeSinceMidnight())
                 },
                 new Link
                 {
                     Id = 1,
                     FullLink = "https://www.pgs-soft.com/pl/",
-                    ShortLink = hashids.Encode(timeSinceMidnight())
+                    ShortLink = hashids.Encode(TimeSinceMidnight())
                 }
             };
 
         }
 
-        private static int timeSinceMidnight()
+        private static int TimeSinceMidnight()
         {
             DateTime dateTime = DateTime.Now;
             int timeMsSinceMidnight = (int)dateTime.TimeOfDay.TotalMilliseconds;
@@ -56,7 +59,7 @@ namespace MDLinkShortener.Repository
             }
             
 
-            link.ShortLink = hashids.Encode(timeSinceMidnight());
+            link.ShortLink = hashids.Encode(TimeSinceMidnight());
             _links.Add(link);
         }
 

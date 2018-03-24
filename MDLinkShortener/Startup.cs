@@ -2,6 +2,7 @@
 using MDLinkShortener.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,7 @@ namespace MDLinkShortener
         {
             services.AddMvc();
             services.AddSingleton<ILinksRepository, LinksRepository>();
+            services.AddDbContext<LinkDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("LinkDbConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
