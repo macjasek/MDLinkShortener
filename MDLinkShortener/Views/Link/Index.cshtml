@@ -12,24 +12,26 @@
         <button type="submit">Add</button>
 
     }
-    <table>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td><strong>Full link: </strong></td>
-            <td>@Html.DisplayFor(model => item.FullLink)</td>
-            <td><strong>Short Link: </strong></td>
-            <td>
-                <a href="/@item.ShortLink" target="_blank">@Html.DisplayFor(model => item.ShortLink)</a>
-            </td>
-            <td>| @Html.ActionLink("Delete", "Delete", "Link", item)</td>
-            <td>| @Html.ActionLink("Edit", "Edit", "Link", item)</td>
-        </tr>
-
-        }
-    </table>
+        <table>
+            @foreach (var item in Model)
+                {
+                    
+                        <tr>
+                            <td><strong>Full link: </strong></td>
+                            <td>@Html.DisplayFor(model => item.FullLink)</td>
+                            <td><strong>Short Link: </strong></td>
+                            <td>
+                                <a href="/@item.ShortLink" target="_blank">@Html.DisplayFor(model => item.ShortLink)</a>
+                            </td>
+                            <td>| @Html.ActionLink("Delete", "Delete", "Link", item)</td>
+                            <td>| @Html.ActionLink("Edit", "Edit", "Link", item)</td>
+                        </tr>
+                    
+                }
+        </table>
     <div>
         @Html.ActionLink("Clear List", "Clear", "Link")
     </div>
+    @Html.Raw(TempData["msg"])
 </body>
 </html>

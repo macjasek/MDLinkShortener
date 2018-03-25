@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace MDLinkShortener
 {
@@ -24,6 +25,7 @@ namespace MDLinkShortener
             services.AddMvc();
             services.AddTransient<ILinksRepository, LinksRepository>();
             services.AddDbContext<LinkDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("LinkDbConnection")));
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "MD Short Link API", Version = "v1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,12 +38,17 @@ namespace MDLinkShortener
 
             app.UseStaticFiles();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MD Short Link API"));
+
             app.UseMvc(routes => 
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Link}/{action=Index}/{id?}");
             });
+
+            
         }
     }
 }

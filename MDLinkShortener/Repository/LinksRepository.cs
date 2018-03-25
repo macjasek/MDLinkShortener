@@ -1,6 +1,7 @@
 ﻿using HashidsNet;
 using MDLinkShortener.Interfaces;
 using MDLinkShortener.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +75,7 @@ namespace MDLinkShortener.Repository
         public void Update(Link link)
         {
             _context.Links.Attach(link);
+            _context.Entry(link).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

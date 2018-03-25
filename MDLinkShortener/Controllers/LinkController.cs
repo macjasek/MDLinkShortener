@@ -8,6 +8,7 @@ namespace MDLinkShortener.Controllers
     public class LinkController : Controller
     {
         private ILinksRepository _repository;
+        private int itemPerPage = 10;
 
         public LinkController(ILinksRepository linksRepository)
         {
@@ -15,9 +16,21 @@ namespace MDLinkShortener.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] int page = 1)
         {
-            var (links, count) = _repository.Get(0);
+            var (links, count) = _repository.Get((page - 1) * itemPerPage);
+
+            var result = new QueryResult
+            {
+
+                PageInfo = new PageInfo
+                {
+                    CurrentPage = page,
+                    MaxPage = count % itemPerPage == 0 ? count / itemPerPage : count / itemPerPage + 1
+                },
+                Items = links.Select(x => new LinkResult(x))
+            };
+
             return View(links.Select(x => x).ToList());
         }
 
@@ -26,6 +39,7 @@ namespace MDLinkShortener.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["msg"] = "<script>alert('Link url format is not correct. Use full link started from http:// or https://');</script>";
                 return Redirect("Index");
             }
 
@@ -51,10 +65,13 @@ namespace MDLinkShortener.Controllers
         [HttpPost]
         public IActionResult Update(Link link)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _repository.Update(link);
+                TempData["msg"] = "<script>alert('Link url format is not correct. Use full link started from http:// or https://');</script>";
+                return Redirect("Index");
             }
+
+            _repository.Update(link);
 
             return Redirect("Index");
         }
