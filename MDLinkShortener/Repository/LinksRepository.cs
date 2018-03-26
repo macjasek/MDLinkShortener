@@ -10,7 +10,7 @@ namespace MDLinkShortener.Repository
 {
     public class LinksRepository : ILinksRepository
     {
-        private List<Link> _links;
+        
         private Hashids hashids = new Hashids("Akademia WebDev",4);
         private readonly LinkDbContext _context;
         private readonly int linksPerPage = 20;
@@ -19,22 +19,6 @@ namespace MDLinkShortener.Repository
         public LinksRepository(LinkDbContext context)
         {
             _context = context;
-            _links = new List<Link>
-            {
-                new Link
-                {
-                    Id = 0,
-                    FullLink = "https://ilovebluesguitar.com/",
-                    ShortLink = hashids.Encode(TimeSinceMidnight())
-                },
-                new Link
-                {
-                    Id = 1,
-                    FullLink = "https://www.pgs-soft.com/pl/",
-                    ShortLink = hashids.Encode(TimeSinceMidnight())
-                }
-            };
-
         }
 
         private static int TimeSinceMidnight()
@@ -81,9 +65,7 @@ namespace MDLinkShortener.Repository
 
         public string RedirectLink(string id)
         {
-            var linkToRedirect = _context.Links
-                .Where(x => x.ShortLink == id)
-                .FirstOrDefault();
+            Link linkToRedirect = GetLinkFromShortLink(id);
 
             if (linkToRedirect != null)
             {
@@ -92,7 +74,14 @@ namespace MDLinkShortener.Repository
 
             return "index";
 
-                
+
+        }
+
+        private Link GetLinkFromShortLink(string id)
+        {
+            return _context.Links
+                .Where(x => x.ShortLink == id)
+                .FirstOrDefault();
         }
 
         public void Clear()
@@ -100,6 +89,37 @@ namespace MDLinkShortener.Repository
             _context.RemoveRange(_context.Links);
         }
 
+        public void SaveLinkClick(string id, string clientIpAddress)
+        {
+            var link = GetLinkFromShortLink(id);
+            link.Clicks++;
+            _context.Links.Attach(link);
+            _context.Entry(link).State = EntityState.Modified;
+            _context.SaveChanges();
 
+            //IpAddress ipAddress = GetIpAddressFromClientIp(clientIpAddress);
+
+            //if (ipAddress == null)
+            //{
+            //    link.UniqueClicks++;
+            //    ipAddress = new IpAddress { ClientIp = clientIpAddress };
+            //    IpLink ipLink = new IpLink { Link = link, IpAddress = ipAddress };
+            //    _context.IpAddresses.Add(ipAddress);
+            //    _context.IpLink.Add()
+            //}
+
+            
+
+
+
+
+        }
+
+        private IpAddress GetIpAddressFromClientIp(string clientIpAddress)
+        {
+            return _context.IpAddresses
+                .Where(x => x.ClientIp == clientIpAddress)
+                .FirstOrDefault();
+        }
     }
 }

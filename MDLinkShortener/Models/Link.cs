@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MDLinkShortener.Models
 {
@@ -10,5 +11,9 @@ namespace MDLinkShortener.Models
         [Url]
         public string FullLink { get; set; }
         public string ShortLink { get; set; }
+        public int Clicks { get; set; }
+        public int UniqueClicks { get; set; }
+
+        public List<IpLink> IpLinks { get; set; }
     }
 }

@@ -23,6 +23,12 @@
                             <td>
                                 <a href="/@item.ShortLink" target="_blank">@Html.DisplayFor(model => item.ShortLink)</a>
                             </td>
+                            <td>
+                                <strong>Clicks:</strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Clicks)
+                            </td>
                             <td>| @Html.ActionLink("Delete", "Delete", "Link", item)</td>
                             <td>| @Html.ActionLink("Edit", "Edit", "Link", item)</td>
                         </tr>

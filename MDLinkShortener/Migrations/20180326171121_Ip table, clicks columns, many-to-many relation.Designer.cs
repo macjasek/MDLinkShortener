@@ -10,9 +10,10 @@ using System;
 namespace MDLinkShortener.Migrations
 {
     [DbContext(typeof(LinkDbContext))]
-    partial class LinkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180326171121_Ip table, clicks columns, many-to-many relation")]
+    partial class Iptableclickscolumnsmanytomanyrelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
