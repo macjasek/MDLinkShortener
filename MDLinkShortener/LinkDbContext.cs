@@ -11,6 +11,7 @@ namespace MDLinkShortener
 
         public DbSet<Link> Links { get; set; }
         public DbSet<IpAddress> IpAddresses { get; set; }
+        public DbSet<IpLink> IpLink { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -16,22 +16,28 @@
             @foreach (var item in Model)
                 {
                     
-                        <tr>
-                            <td><strong>Full link: </strong></td>
-                            <td>@Html.DisplayFor(model => item.FullLink)</td>
-                            <td><strong>Short Link: </strong></td>
-                            <td>
-                                <a href="/@item.ShortLink" target="_blank">@Html.DisplayFor(model => item.ShortLink)</a>
-                            </td>
-                            <td>
-                                <strong>Clicks:</strong>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => item.Clicks)
-                            </td>
-                            <td>| @Html.ActionLink("Delete", "Delete", "Link", item)</td>
-                            <td>| @Html.ActionLink("Edit", "Edit", "Link", item)</td>
-                        </tr>
+            <tr>
+                <td><strong>Full link: </strong></td>
+                <td>@Html.DisplayFor(model => item.FullLink)</td>
+                <td><strong>Short Link: </strong></td>
+                <td>
+                    <a href="/@item.ShortLink" target="_blank">@Html.DisplayFor(model => item.ShortLink)</a>
+                </td>
+                <td>
+                    <strong>Clicks:</strong>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Clicks)
+                </td>
+                <td>
+                    <strong>Unique Clicks:</strong>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.UniqueClicks)
+                </td>
+                <td>| @Html.ActionLink("Delete", "Delete", "Link", item)</td>
+                <td>| @Html.ActionLink("Edit", "Edit", "Link", item)</td>
+            </tr>
                     
                 }
         </table>

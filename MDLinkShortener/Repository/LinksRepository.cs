@@ -93,22 +93,34 @@ namespace MDLinkShortener.Repository
         {
             var link = GetLinkFromShortLink(id);
             link.Clicks++;
+            
+
+            IpAddress ipAddress = GetIpAddressFromClientIp(clientIpAddress);
+
+            if (ipAddress == null)
+            {
+                link.UniqueClicks++;
+                ipAddress = new IpAddress { ClientIp = clientIpAddress };            
+                
+
+                var ipLinkToAdd = new IpLink
+                {
+                    IpAddress = ipAddress,
+                    Link = link
+                };
+
+                link.IpLinks = new List<IpLink>
+                {
+                    ipLinkToAdd
+                };
+
+                _context.IpAddresses.Add(ipAddress);
+
+            }
+
             _context.Links.Attach(link);
             _context.Entry(link).State = EntityState.Modified;
             _context.SaveChanges();
-
-            //IpAddress ipAddress = GetIpAddressFromClientIp(clientIpAddress);
-
-            //if (ipAddress == null)
-            //{
-            //    link.UniqueClicks++;
-            //    ipAddress = new IpAddress { ClientIp = clientIpAddress };
-            //    IpLink ipLink = new IpLink { Link = link, IpAddress = ipAddress };
-            //    _context.IpAddresses.Add(ipAddress);
-            //    _context.IpLink.Add()
-            //}
-
-            
 
 
 
