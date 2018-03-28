@@ -13,7 +13,7 @@ namespace MDLinkShortener.Repository
         
         private Hashids hashids = new Hashids("Akademia WebDev",4);
         private readonly LinkDbContext _context;
-        private readonly int linksPerPage = 20;
+        private readonly int linksPerPage = 10;
 
 
         public LinksRepository(LinkDbContext context)
@@ -84,24 +84,20 @@ namespace MDLinkShortener.Repository
                 .FirstOrDefault();
         }
 
-        public void Clear()
-        {
-            _context.RemoveRange(_context.Links);
-        }
-
         public void SaveLinkClick(string id, string clientIpAddress)
         {
             var link = GetLinkFromShortLink(id);
             link.Clicks++;
-            
 
             IpAddress ipAddress = GetIpAddressFromClientIp(clientIpAddress);
 
-            if (ipAddress == null)
+            bool wasLinkClickFromIp = _context.IpLink
+                .Where(i => i.IpAddress.ClientIp == clientIpAddress && i.LinkId == link.Id)
+                .Count() > 0;
+
+            if (!wasLinkClickFromIp)
             {
                 link.UniqueClicks++;
-                ipAddress = new IpAddress { ClientIp = clientIpAddress };            
-                
 
                 var ipLinkToAdd = new IpLink
                 {
@@ -114,24 +110,28 @@ namespace MDLinkShortener.Repository
                     ipLinkToAdd
                 };
 
-                _context.IpAddresses.Add(ipAddress);
-
-            }
+            }      
 
             _context.Links.Attach(link);
             _context.Entry(link).State = EntityState.Modified;
             _context.SaveChanges();
 
-
-
-
         }
 
         private IpAddress GetIpAddressFromClientIp(string clientIpAddress)
         {
-            return _context.IpAddresses
+
+            var ipAddress = _context.IpAddresses
                 .Where(x => x.ClientIp == clientIpAddress)
                 .FirstOrDefault();
+
+            if (ipAddress == null)
+            {
+                ipAddress = new IpAddress { ClientIp = clientIpAddress };
+                _context.IpAddresses.Add(ipAddress);
+            }
+
+            return ipAddress;
         }
     }
 }

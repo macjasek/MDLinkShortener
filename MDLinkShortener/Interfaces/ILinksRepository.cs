@@ -10,7 +10,6 @@ namespace MDLinkShortener.Interfaces
         void Delete(int linkId);
         void Update(Link link);
         string RedirectLink(string id);
-        void Clear();
         void SaveLinkClick(string id, string clientIpAddress);
     }
 }

@@ -76,11 +76,5 @@ namespace MDLinkShortener.Controllers
             return Redirect("Index");
         }
 
-        [HttpGet]
-        public IActionResult Clear()
-        {
-            _repository.Clear();
-            return Redirect("Index");
-        }
     }
 }

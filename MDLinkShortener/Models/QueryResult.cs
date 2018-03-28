@@ -22,10 +22,15 @@ namespace MDLinkShortener.Models
             Id = link.Id;
             FullLink = link.FullLink;
             ShortLink = link.ShortLink;
+            Clicks = link.Clicks;
+            UniqueClicks = link.UniqueClicks;
+            
         }
 
         public int Id { get; set; }
         public string FullLink { get; set; }
         public string ShortLink { get; set; }
+        public int Clicks { get; set; }
+        public int UniqueClicks { get; set; }
     }
 }
