@@ -133,5 +133,10 @@ namespace MDLinkShortener.Repository
 
             return ipAddress;
         }
+
+        public object GetSingleLink(int id)
+        {
+            return _context.Links.FirstOrDefault(l => l.Id == id);
+        }
     }
 }

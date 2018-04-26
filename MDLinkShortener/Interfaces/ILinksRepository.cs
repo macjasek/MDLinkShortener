@@ -11,5 +11,6 @@ namespace MDLinkShortener.Interfaces
         void Update(Link link);
         string RedirectLink(string id);
         void SaveLinkClick(string id, string clientIpAddress);
+        object GetSingleLink(int id);
     }
 }

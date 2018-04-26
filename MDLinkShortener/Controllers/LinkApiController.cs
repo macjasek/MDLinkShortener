@@ -60,13 +60,21 @@ namespace MDLinkShortener.Controllers
             _repository.Update(link);
             return Ok();
         }
-        
+
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
+        [Route("{id}")]
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
             _repository.Delete(id);
-            return Ok();
+            return new NoContentResult();
+        }
+
+        [Route("{id}")]
+        [HttpGet]
+        public IActionResult GetSingleLink(int id)
+        {
+            return Ok(_repository.GetSingleLink(id));
         }
     }
 }
